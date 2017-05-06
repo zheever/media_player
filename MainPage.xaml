@@ -1,0 +1,69 @@
+﻿<Page
+    x:Class="MEDIA.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MEDIA"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:cvt="using:MEDIA" >
+
+    <Page.Resources>
+        <cvt:MediaTimerConverter x:Key="mc"></cvt:MediaTimerConverter>
+    </Page.Resources>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:Name="PlayButton" Icon="Play" Click="PlayButton_Click"></AppBarButton>
+            <AppBarButton x:Name="PauseButton" Icon="Pause" Click="PauseButton_Click"></AppBarButton>
+            <AppBarButton x:Name="StopButton" Icon="Stop" Click="StopButton_Click"></AppBarButton>
+            <AppBarButton x:Name="FileOpenPickerButton" Icon="Pictures" Click="PickMediaFileButton_Click"></AppBarButton>
+            <AppBarButton x:Name="FullWindowButton" Icon="FullScreen" Click="FullWindow_Click"></AppBarButton>
+            <AppBarButton x:Name="VolumeButton" Icon="Volume" Click="VolumeButton_Click">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout>
+                        <Slider x:Name="VolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Width="150"/>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <Grid>
+        <StackPanel Margin="0,100,0,0">
+            <RelativePanel x:Name="MediaRelPanel"  Width="640" Height="360" BorderBrush="Gray" BorderThickness="1" >
+                <Canvas x:Name="DiskCanvas" Background="White" Width="300" Height="300" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignTopWithPanel="True">
+                    <Canvas.Resources>
+                        <Storyboard x:Name="storyboard1">
+                            <DoubleAnimation Storyboard.TargetName="DiskPic" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransfrom.Angle)"
+                                              From="0" To="360" Duration="0:0:5" RepeatBehavior="Forever"></DoubleAnimation>
+                        </Storyboard>
+                    </Canvas.Resources>
+                    <Rectangle x:Name="DiskPic" RenderTransformOrigin="0.5,0.5" RelativePanel.AlignHorizontalCenterWithPanel="True" Visibility="Visible" RelativePanel.AlignVerticalCenterWithPanel="True" Width="300" Height="300">
+                        <Rectangle.Fill>
+                            <ImageBrush Stretch="Fill" ImageSource="Assets/DiskPic.png"/>
+                        </Rectangle.Fill>
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform></ScaleTransform>
+                                <SkewTransform></SkewTransform>
+                                <RotateTransform></RotateTransform>
+                                <TranslateTransform></TranslateTransform>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                </Canvas>
+
+                <Rectangle x:Name="Stick" Margin="304,-44,-383,-77" RenderTransformOrigin="0.569,0.362">
+                    <Rectangle.Fill>
+                        <ImageBrush Stretch="Fill" ImageSource="Assets/Stick.png"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+
+                <MediaElement x:Name="Media" Width="640" Height="360" Stretch="Fill" AutoPlay="False" RelativePanel.AlignHorizontalCenterWithPanel="True"></MediaElement>
+                <Slider x:Name="TimeSlider"  Width="630" Value="{Binding ElementName=Media, Path=Position, Converter={StaticResource mc}, Mode=TwoWay}" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True" Opacity="0" PointerMoved="TimeSlider_PointerMoved" PointerExited="TimeSlider_PointerExited" ></Slider>
+            </RelativePanel>
+        </StackPanel>
+
+    </Grid>
+</Page>
